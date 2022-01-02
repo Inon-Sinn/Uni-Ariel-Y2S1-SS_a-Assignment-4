@@ -4,7 +4,7 @@
 #include "algo.h"
 
 //Finds the shortest path using the dijkstra Algorithm
-int dijkstra(pnode *head,int amount_of_Nodes, int src, int dest);
+void dijkstra(pnode *head,int amount_of_Nodes, int src, int dest);
 
 int main(int argc, char const *argv[])
 {
@@ -80,7 +80,7 @@ int main(int argc, char const *argv[])
     return 0;
 }
 
-int dijkstra(pnode *head,int amount_of_Nodes,  int src, int dest){
+void dijkstra(pnode *head,int amount_of_Nodes,  int src, int dest){
     //Create the array that save the distance and the Queue
     int *d = (int*)malloc(sizeof(int)*amount_of_Nodes);
     int *Queue = (int*)malloc(sizeof(int)*amount_of_Nodes);
@@ -125,9 +125,10 @@ int dijkstra(pnode *head,int amount_of_Nodes,  int src, int dest){
             curEdge = curEdge-> next;
         }
     }
-    int res = d[dest];
+    printf("Dijsktra shortest path: %d \n",d[dest]);
     //Deallocate the arrays
     free(d);
     free(Queue);
-    return res;
 }
+
+
