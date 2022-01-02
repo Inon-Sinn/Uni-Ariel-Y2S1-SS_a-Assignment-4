@@ -84,24 +84,44 @@ int dijkstra(pnode *head,int amount_of_Nodes,  int src, int dest){
     //Create the array that save the distance and the Queue
     int *d = (int*)malloc(sizeof(int)*amount_of_Nodes);
     int *Queue = (int*)malloc(sizeof(int)*amount_of_Nodes);
-    int start = 0,end =0;
+    int start = 0,end =amount_of_Nodes-1, min, min_id;
     // Check if memory was allocated
     if (d==NULL || Queue ==NULL)
     {
         printf("Memory Not aloocated");
         return -1;
     }
-    //initlize the array
+    //initlize the array and Queue
     int i;
-    for (i = 0; i < amount_of_Nodes; i++)
+    for (i = 0; i < amount_of_Nodes; i++){
         d[i] = -1;
-    //Enter the first node into the array and Queue;
+        Queue[i] = i;
+    }
     d[src] = 0;
-    Queue[start] = src;
-    end++;
+    //Run the algorithm
     while (start<end)
     {
-        printf("hi");
+        //Extract the Min in the Queue
+        min = start;
+        for (i = start+1; i < end; i++){
+            if(d[Queue[i]]<d[Queue[min]])
+                min = i;
+        }
+        min_id = Queue[min];
+        //Remove min from the Queue
+
+        //Go over the edges of the min node
+        pnode minNode = getNode(head,min_id);
+        edge *curEdge = minNode -> edges;
+        while (curEdge != NULL)
+        {
+            //Relax algorithm
+
+        }
     }
-    return -1;
+    int res = d[dest];
+    //Deallocate the arrays
+    free(d);
+    free(Queue);
+    return res;
 }
