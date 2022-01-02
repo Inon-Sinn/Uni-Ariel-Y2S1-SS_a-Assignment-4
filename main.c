@@ -12,6 +12,8 @@ void addEdge(pnode node, int dest, int w, pnode *head);
 
 void removeNode(pnode *head, int node_id);
 
+void removeEdge(pnode node);
+
 int main(int argc, char const *argv[])
 {
     pnode head = NULL;
@@ -26,7 +28,7 @@ int main(int argc, char const *argv[])
     addEdge(gotNode,1,20, &head);
     printGraph_cmd(head);
     printf("-------\n");
-    removeNode(&head,1);
+    removeNode(&head,4);
     printGraph_cmd(head);
     return 0;
 }
@@ -88,12 +90,25 @@ void removeNode(pnode *head, int node_id){
             found = 1;
         }
         else {
+            prev = &(current->next);
             current = current->next;
-            *prev = current;
         }
     }
-    //Free the node right
+    //Deallocate the memory of the node and its edges
+    while(current->edges != NULL)
+        removeEdge(current);
+    free(current);
 }
+
+void removeEdge(pnode node){
+    edge *newEdge = (node->edges);
+    if(newEdge != NULL){
+        node -> edges = newEdge -> next;
+        //deallocating the memory of the edge
+        free(newEdge);
+    }
+}
+
 
 
 
