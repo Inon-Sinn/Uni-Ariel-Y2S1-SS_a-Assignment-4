@@ -2,27 +2,13 @@
 #include <stdlib.h>
 #include "graph.h"
 
-void printGraph_cmd(pnode head);
+void build_graph_cmd(pnode *head, int num_of_nodes);
 
-void add_node(pnode *head, int node_id);
-
-pnode getNode(pnode *head, int node_id);
-
-void addEdge(pnode node, int dest, int w, pnode *head);
-
-void removeNode(pnode *head, int node_id);
-
-void removeEdge(pnode node);
-
-void removeGraph(pnode *head);
 
 int main(int argc, char const *argv[])
 {
     pnode head = NULL;
-    add_node(&head,0);
-    add_node(&head,1);
-    add_node(&head,2);
-    add_node(&head,4);
+    build_graph_cmd(&head,5);
     printGraph_cmd(head);
     printf("-------\n");
     pnode gotNode = getNode(&head,4);
@@ -31,12 +17,18 @@ int main(int argc, char const *argv[])
     printGraph_cmd(head);
     printf("-------\n");
     removeNode(&head,2);
-    removeNode(&head,6);
     printGraph_cmd(head);
     printf("-------\n");
-    removeGraph(&head);
+   build_graph_cmd(&head,3);
     printGraph_cmd(head);
     return 0;
+}
+
+void build_graph_cmd(pnode *head, int num_of_nodes){
+    removeGraph(head);
+    int i;
+    for (i = 0; i < num_of_nodes; i++)
+        add_node(head,i);
 }
 
 void printGraph_cmd(pnode head){
