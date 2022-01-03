@@ -14,6 +14,28 @@ int min(int x,int y, int w);
 
 int* copyArray(int *arr, int remove, int length);
 
+void removeEdge2(pnode node,int node_id){
+    edge *newEdge = (node->edges);
+    edge **prev = &(node->edges);
+    int found = 0;
+    while(newEdge != NULL && found == 0)
+    {
+        if(newEdge -> endpoint -> node_num == node_id){
+            *prev = newEdge->next;
+            found = 1;
+        }
+        else{
+            prev = &(newEdge->next);
+            newEdge = newEdge -> next;
+        };
+    }
+    //Deallocate the memory of the edge
+    if(found==1){
+        free(newEdge);
+    }
+
+}
+
 int main(int argc, char const *argv[])
 {
     pnode head = NULL;
@@ -28,7 +50,7 @@ int main(int argc, char const *argv[])
     char input;
 
     if(scanf("%c",&input)!=EOF){
-        while (input == 'A' || input == 'B' || input =='D' || input=='S'|| input == 'T')//EOF - End of file, use ctrl + Z to get the same thing throug user input
+        while (input == 'A' || input == 'B' || input =='D' || input=='S'|| input == 'T')//EOF - End of file, use ctrl + Z to get the same thing through user input
         {
             if (input == 'A')
             {
@@ -47,7 +69,7 @@ int main(int argc, char const *argv[])
                         scanf("%d",&weight);
                         addEdge(currentNode,dest,weight,&head);
                     }
-                    if(scanf("%c",&input)!=EOF)//TODO check
+                    if(scanf("%c",&input)==EOF)//TODO check
                         input = 'N';
                 }
             }
@@ -56,26 +78,31 @@ int main(int argc, char const *argv[])
                 //find the Node
                 scanf("%d",&node_id);
                 pnode currentNode = getNode(&head,node_id);
-                if(currentNode == NULL){
+                if(currentNode != NULL){
                     while (currentNode->edges != NULL)
                         removeEdge(currentNode);
                 }
                 else{
                     add_node(&head,node_id);
-                    
+                    currentNode = getNode(&head,node_id);
                 }
                 // Add the edges to the node
                 while(scanf("%d",&dest) == 1){
                     scanf("%d",&weight);
                     addEdge(currentNode,dest,weight,&head);
                 }
-                if(scanf("%c",&input)!=EOF)//TODO check
+                if(scanf("%c",&input)==EOF)//TODO check
                         input = 'N';
             }
             if (input == 'D')
             {
-                int node_id;
+                //Remove the incoming edges
                 scanf("%d",&node_id);
+                node *count = head;
+                while (count != NULL) {
+                    removeEdge2(count, node_id);
+                    count = count->next;
+                }
                 removeNode(&head,node_id);
                 amount_of_Nodes--;
                 scanf("%c",&input);
@@ -88,7 +115,7 @@ int main(int argc, char const *argv[])
                 //find the shortest distance
                 res = dijkstra(&head, amount_of_Nodes,node_id,dest);
                 printf("Dijsktra shortest path: %d \n",res);
-                if(scanf("%c",&input)!=EOF)//TODO check
+                if(scanf("%c",&input)==EOF)//TODO check
                         input = 'N';
             }
             if (input == 'T')
@@ -96,9 +123,13 @@ int main(int argc, char const *argv[])
                 //Collect the cities in an array
                 scanf("%d",&amount_of_cities);
                 int *cities = (int*)malloc(sizeof(int)*amount_of_cities);
+                if(cities==NULL){
+                    printf("No Memory");
+                    exit(0);
+                }
                 for (i = 0; i < amount_of_cities; i++)
                 {
-                    scanf("%d",city);
+                    scanf("%d",&city);
                     cities[i] = city;
                 }
                 //Run the TSP Algorithm
@@ -106,7 +137,7 @@ int main(int argc, char const *argv[])
                 printf("TSP shortest path: %d \n",res);
                 //Deallocate the array
                 free(cities);
-                if(scanf("%c",&input)!=EOF)//TODO check
+                if(scanf("%c",&input)==EOF)//TODO check
                         input = 'N';
             }
         }
@@ -125,10 +156,10 @@ int dijkstra(pnode *head,int amount_of_Nodes,  int src, int dest){
     // Check if memory was allocated
     if (d==NULL || Queue ==NULL)
     {
-        printf("Memory Not aloocated");
-        return -1;
+        printf("Memory Not allocated");
+        exit(0);
     }
-    //initlize the array and Queue
+    //initialize the array and Queue
     int i;
     for (i = 0; i < amount_of_Nodes; i++){
         d[i] = -1;
@@ -206,7 +237,7 @@ int TSPalgorithm(pnode *head,int *cities,int start,int length){
     return res;
 }
 
-//An auxiliary function to get shortest path
+//An auxiliary function to get the shortest path
 int min(int x,int y,int w){
     if(x==-1 && y==-1)
         return -1;
@@ -219,9 +250,13 @@ int min(int x,int y,int w){
     return y+w;
 }
 
-//An auxiliray function that given an array and an index, it return a copy of that array without the index
+//An auxiliary function that given an array and an index, it returns a copy of that array without the index
 int* copyArray(int *arr, int remove, int length){
     int *copy = (int*)malloc(sizeof(int)*(length-1));
+    if(copy==NULL){
+        printf("No Memory");
+        exit(0);
+    }
     int i,count=0;
     for (i = 0; i < length; i++)
     {
@@ -231,7 +266,7 @@ int* copyArray(int *arr, int remove, int length){
         }
     }
     return copy;
-    
+
 }
 
 
