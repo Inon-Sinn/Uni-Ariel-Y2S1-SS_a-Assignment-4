@@ -69,11 +69,11 @@ int main(int argc, char const *argv[])
                         scanf("%d",&weight);
                         addEdge(currentNode,dest,weight,&head);
                     }
-                    if(scanf("%c",&input)==EOF)//TODO check
+                    if(scanf("%c",&input)==EOF)
                         input = 'N';
                 }
             }
-            if (input == 'B')//TODO not finished
+            if (input == 'B')
             {
                 //find the Node
                 scanf("%d",&node_id);
@@ -85,14 +85,19 @@ int main(int argc, char const *argv[])
                 else{
                     add_node(&head,node_id);
                     currentNode = getNode(&head,node_id);
+                    amount_of_Nodes++;
                 }
                 // Add the edges to the node
                 while(scanf("%d",&dest) == 1){
                     scanf("%d",&weight);
                     addEdge(currentNode,dest,weight,&head);
                 }
-                if(scanf("%c",&input)==EOF)//TODO check
+                if(scanf("%c",&input)==EOF)
+                    input = 'N';
+                if(input == ' '){
+                    if(scanf("%c",&input)==EOF)
                         input = 'N';
+                }
             }
             if (input == 'D')
             {
@@ -105,7 +110,12 @@ int main(int argc, char const *argv[])
                 }
                 removeNode(&head,node_id);
                 amount_of_Nodes--;
-                scanf("%c",&input);
+                if(scanf("%c",&input)==EOF)
+                    input = 'N';
+                if(input == ' '){
+                    if(scanf("%c",&input)==EOF)
+                        input = 'N';
+                }
             }
             if (input == 'S')
             {
@@ -115,8 +125,12 @@ int main(int argc, char const *argv[])
                 //find the shortest distance
                 res = dijkstra(&head, amount_of_Nodes,node_id,dest);
                 printf("Dijsktra shortest path: %d \n",res);
-                if(scanf("%c",&input)==EOF)//TODO check
+                if(scanf("%c",&input)==EOF)
+                    input = 'N';
+                if(input == ' '){
+                    if(scanf("%c",&input)==EOF)
                         input = 'N';
+                }
             }
             if (input == 'T')
             {
@@ -137,8 +151,12 @@ int main(int argc, char const *argv[])
                 printf("TSP shortest path: %d \n",res);
                 //Deallocate the array
                 free(cities);
-                if(scanf("%c",&input)==EOF)//TODO check
+                if(scanf("%c",&input)==EOF)
+                    input = 'N';
+                if(input == ' '){
+                    if(scanf("%c",&input)==EOF)
                         input = 'N';
+                }
             }
         }
     }
@@ -177,9 +195,9 @@ int dijkstra(pnode *head,int amount_of_Nodes,  int src, int dest){
         }
         min_id = Queue[Min];
         //Remove min from the Queue
-            Queue[Min] = Queue[start];
-            Queue[start] = min_id;
-            start++;
+        Queue[Min] = Queue[start];
+        Queue[start] = min_id;
+        start++;
         //Go over the edges of the min node
         pnode minNode = getNode(head,min_id);
         edge *curEdge = minNode -> edges;
@@ -223,7 +241,7 @@ int TSPalgorithm(pnode *head,int *cities,int start,int length){
         res = 0;
     else if(length == 1)
         res =  dijkstra(head,length,start,cities[0]);
-    //Recursive Tsp call on a smaller amount of cities
+        //Recursive Tsp call on a smaller amount of cities
     else{
         for (i = 0; i < length; i++)
         {
