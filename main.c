@@ -40,7 +40,6 @@ int main(int argc, char const *argv[])
 {
     pnode head = NULL;
 
-    int amount_of_Nodes;
     int node_id;
     int amount_of_cities;
     int dest;
@@ -48,6 +47,7 @@ int main(int argc, char const *argv[])
     int res;
     int i,city;
     char input;
+    int amount_of_Nodes;
 
     if(scanf("%c",&input)!=EOF){
         while (input == 'A' || input == 'B' || input =='D' || input=='S'|| input == 'T')//EOF - End of file, use ctrl + Z to get the same thing through user input
@@ -174,7 +174,6 @@ int dijkstra(pnode *head,int amount_of_Nodes,  int src, int dest){
         //In case they don't exist then is no path so return -1
         return -1;
     }
-    printf("check1\n");
     //Create the array that save the distance and the Queue
     int *d = (int*)malloc(sizeof(int)*amount_of_Nodes);
     int *Queue = (int*)malloc(sizeof(int)*amount_of_Nodes);
@@ -185,7 +184,6 @@ int dijkstra(pnode *head,int amount_of_Nodes,  int src, int dest){
         printf("Memory Not allocated");
         exit(0);
     }
-    printf("check2\n");
     //initialize the array and Queue
     int i;
     for (i = 0; i < amount_of_Nodes; i++){
@@ -194,7 +192,6 @@ int dijkstra(pnode *head,int amount_of_Nodes,  int src, int dest){
     }
     d[src] = 0;
     //Run the algorithm
-    printf("check3:%d == 0\n",d[src]);
     while (start<end)
     {
         //Extract the Min in the Queue
@@ -205,7 +202,6 @@ int dijkstra(pnode *head,int amount_of_Nodes,  int src, int dest){
                 Min = i;
         }
         min_id = Queue[Min];
-        printf("The minimum is %d\n",d[min_id]);
         //Remove min from the Queue
         Queue[Min] = Queue[start];
         Queue[start] = min_id;
@@ -221,7 +217,6 @@ int dijkstra(pnode *head,int amount_of_Nodes,  int src, int dest){
             curEdge = curEdge-> next;
         }
     }
-    printf("last check: res = %d\n",d[dest]);
     int res = d[dest];
     //Deallocate the arrays
     free(d);
