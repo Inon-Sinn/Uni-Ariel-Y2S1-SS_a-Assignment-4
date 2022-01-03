@@ -94,7 +94,7 @@ int main(int argc, char const *argv[])
     return 0;
 }
 
-int dijkstra(pnode *head,int amount_of_Nodes,  int src, int dest){
+int dijkstra(pnode *head,int amount_of_Nodes,  int src, int dest){//TODO MAjor Bug - (-1)
     //Create the array that save the distance and the Queue
     int *d = (int*)malloc(sizeof(int)*amount_of_Nodes);
     int *Queue = (int*)malloc(sizeof(int)*amount_of_Nodes);
@@ -146,6 +146,7 @@ int dijkstra(pnode *head,int amount_of_Nodes,  int src, int dest){
     return res;
 }
 
+//The main TSP function
 int TSP(pnode *head,int *cities, int length){
     int minDist = -1, i;
     //Easy Cases
@@ -157,19 +158,34 @@ int TSP(pnode *head,int *cities, int length){
         int *copy = copyArray(cities,i,length);
         minDist = min(minDist,TSPalgorithm(head,copy,i,length-1));
     }
-    //Dallocate the memory of the array
+    //Deallocate the memory of the array
     free(cities);
     return minDist;
 }
 
-int TSPalgorithm(pnode *head,int *cities,int start,int length){ //TODO - not finished
+// This function is the tsp algorithm
+int TSPalgorithm(pnode *head,int *cities,int start,int length){
+    int res = -1,minDist = -1,i;
+    // Base Cases
     if(length == 0)
-        return 0;
-    if(length == 1)
-        return dijkstra(head,length,start,cities[0]);
-    return -1;
+        res = 0;
+    else if(length == 1)
+        res =  dijkstra(head,length,start,cities[0]);
+    //Recursive Tsp call on a smaller amount of cities
+    else{
+        for (i = 0; i < length; i++)
+        {
+            int *copy = copyArray(cities,i,length);
+            minDist = min(minDist,TSPalgorithm(head,copy,i,length-1));
+        }
+        res = minDist;
+    }
+    //Deallocate the memory
+    free(cities);
+    return res;
 }
 
+//An  auxiliary function that given 2 distances of paths ith returns the smaller one
 int min(int x,int y){
     if(x==-1)
         return y;
@@ -180,6 +196,7 @@ int min(int x,int y){
     return y;
 }
 
+//An auxiliray function that given an array and an index, it return a copy of that array without the index
 int* copyArray(int *arr, int remove, int length){
     int *copy = (int*)malloc(sizeof(int)*(length-1));
     int i,count=0;
