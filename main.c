@@ -6,9 +6,9 @@
 //Finds the shortest path using the dijkstra Algorithm
 int dijkstra(pnode *head,int amount_of_Nodes, int src, int dest);
 
-int TSP(pnode *head,int *cities, int length);
+int TSP(pnode *head,int *cities, int length,int amount_of_Nodes);
 
-int TSPalgorithm(pnode *head,int *cities,int start,int length);
+int TSPalgorithm(pnode *head,int *cities,int start,int length,int amount_of_Nodes);
 
 int min(int x,int y, int w);
 
@@ -147,10 +147,8 @@ int main(int argc, char const *argv[])
                     cities[i] = city;
                 }
                 //Run the TSP Algorithm
-                res = TSP(&head,cities,amount_of_cities);
+                res = TSP(&head,cities,amount_of_cities, amount_of_Nodes);
                 printf("TSP shortest path: %d \n",res);
-                //Deallocate the array
-                free(cities);
                 if(scanf("%c",&input)==EOF)
                     input = 'N';
                 if(input == ' '){
@@ -195,7 +193,7 @@ int dijkstra(pnode *head,int amount_of_Nodes,  int src, int dest){
     while (start<end)
     {
         //Extract the Min in the Queue
-        
+
         Min = start;
         for (i = start+1; i < end; i++){
             if(d[Queue[i]] == min(d[Queue[Min]],d[Queue[i]],0))
@@ -225,16 +223,18 @@ int dijkstra(pnode *head,int amount_of_Nodes,  int src, int dest){
 }
 
 //The main TSP function
-int TSP(pnode *head,int *cities, int length){
+int TSP(pnode *head,int *cities, int length,int amount_of_Nodes){
     int minDist = -1, i;
     //Easy Cases
     if(length == 0 || length == 1)
-        return 0;
+        minDist = 0;
     //Run the TSP algorithm
-    for (i = 0; i < length; i++)
-    {
-        int *copy = copyArray(cities,i,length);
-        minDist = min(minDist,TSPalgorithm(head,copy,i,length-1),0);
+    else{
+        for (i = 0; i < length; i++)
+        {
+            int *copy = copyArray(cities,i,length);
+            minDist = min(minDist,TSPalgorithm(head,copy,cities[i],length-1, amount_of_Nodes),0);
+        }
     }
     //Deallocate the memory of the array
     free(cities);
@@ -242,19 +242,24 @@ int TSP(pnode *head,int *cities, int length){
 }
 
 // This function is the tsp algorithm
-int TSPalgorithm(pnode *head,int *cities,int start,int length){
-    int res = -1,minDist = -1,i;
+int TSPalgorithm(pnode *head,int *cities,int start,int length,int amount_of_Nodes){
+    int res = -1,minDist = -1,i, path,tsp;
     // Base Cases
     if(length == 0)
         res = 0;
     else if(length == 1)
-        res =  dijkstra(head,length,start,cities[0]);
+        res =  dijkstra(head,amount_of_Nodes,start,cities[0]);
         //Recursive Tsp call on a smaller amount of cities
     else{
         for (i = 0; i < length; i++)
         {
             int *copy = copyArray(cities,i,length);
-            minDist = min(minDist,TSPalgorithm(head,copy,i,length-1),0);
+            path = dijkstra(head,amount_of_Nodes,start,cities[i]);
+            if(path != -1){
+                tsp = TSPalgorithm(head,copy,cities[i],length-1,amount_of_Nodes);
+                minDist = min(minDist, tsp,path);
+            }
+
         }
         res = minDist;
     }
