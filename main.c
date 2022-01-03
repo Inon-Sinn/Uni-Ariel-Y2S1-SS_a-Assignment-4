@@ -94,7 +94,7 @@ int main(int argc, char const *argv[])
     return 0;
 }
 
-int dijkstra(pnode *head,int amount_of_Nodes,  int src, int dest){//TODO MAjor Bug - (-1)
+int dijkstra(pnode *head,int amount_of_Nodes,  int src, int dest){
     //Create the array that save the distance and the Queue
     int *d = (int*)malloc(sizeof(int)*amount_of_Nodes);
     int *Queue = (int*)malloc(sizeof(int)*amount_of_Nodes);
@@ -131,10 +131,14 @@ int dijkstra(pnode *head,int amount_of_Nodes,  int src, int dest){//TODO MAjor B
         edge *curEdge = minNode -> edges;
         while (curEdge != NULL)
         {
-            //Relax algorithm - TODO MAjor Bug - (-1)
+            //Relax algorithm
             edge_dest_id = curEdge->endpoint->node_num;
-            if(d[edge_dest_id] > d[min_id] + curEdge->weight){
+            if(d[min_id]!=-1 && d[edge_dest_id]==-1){
                 d[edge_dest_id] =  d[min_id] + curEdge->weight;
+            }
+            else if(d[min_id]!=-1 && d[edge_dest_id]!=-1){
+                if (d[edge_dest_id] > (d[min_id] + curEdge->weight))
+                    d[edge_dest_id] =  d[min_id] + curEdge->weight;
             }
             curEdge = curEdge-> next;
         }
