@@ -49,8 +49,8 @@ pnode getNode(pnode *head, int node_id){
             return current;
         current = current -> next;
     }
-    printf("Not found");
-    return 0;
+    printf("Not found");//TODO only here for testing
+    return NULL;
 }
 
 //Adds a new edge to the given node
