@@ -4,7 +4,15 @@
 #include "algo.h"
 
 //Finds the shortest path using the dijkstra Algorithm
-void dijkstra(pnode *head,int amount_of_Nodes, int src, int dest);
+int dijkstra(pnode *head,int amount_of_Nodes, int src, int dest);
+
+int TSP(pnode *head,int *cities, int length);
+
+int TSPalgorithm(pnode *head,int *cities,int start,int length);
+
+int min(int x,int y);
+
+int* copyArray(int *arr, int remove, int length);
 
 int main(int argc, char const *argv[])
 {
@@ -17,7 +25,7 @@ int main(int argc, char const *argv[])
     char input;
 
     scanf("%c",&input);
-    while (input == 'A' || input == 'B' || input =='D' || input=='S'|| input == 'T')
+    while (input == 'A' || input == 'B' || input =='D' || input=='S'|| input == 'T')//EOF - End of file, use ctrl + Z to get the same thing throug user input
     {
         if (input == 'A')
         {
@@ -66,12 +74,18 @@ int main(int argc, char const *argv[])
             scanf("%d",&node_id);
             scanf("%d",&dest);
             //find the shortest distance
-            dijkstra(&head, amount_of_Nodes,node_id,dest);
+            int res = dijkstra(&head, amount_of_Nodes,node_id,dest);
+            printf("Dijsktra shortest path: %d \n",res);
             scanf("%c",&input);
         }
         if (input == 'T')
         {
             printf("You have entered T\n");
+            //Collect the cities in an array
+
+            //Run the TSP Algorithm
+
+            //Deallocate the array
         }
         scanf("%c",&input);
     }
@@ -80,7 +94,7 @@ int main(int argc, char const *argv[])
     return 0;
 }
 
-void dijkstra(pnode *head,int amount_of_Nodes,  int src, int dest){
+int dijkstra(pnode *head,int amount_of_Nodes,  int src, int dest){
     //Create the array that save the distance and the Queue
     int *d = (int*)malloc(sizeof(int)*amount_of_Nodes);
     int *Queue = (int*)malloc(sizeof(int)*amount_of_Nodes);
@@ -117,7 +131,7 @@ void dijkstra(pnode *head,int amount_of_Nodes,  int src, int dest){
         edge *curEdge = minNode -> edges;
         while (curEdge != NULL)
         {
-            //Relax algorithm
+            //Relax algorithm - TODO MAjor Bug - (-1)
             edge_dest_id = curEdge->endpoint->node_num;
             if(d[edge_dest_id] > d[min_id] + curEdge->weight){
                 d[edge_dest_id] =  d[min_id] + curEdge->weight;
@@ -125,10 +139,59 @@ void dijkstra(pnode *head,int amount_of_Nodes,  int src, int dest){
             curEdge = curEdge-> next;
         }
     }
-    printf("Dijsktra shortest path: %d \n",d[dest]);
+    int res = d[dest];
     //Deallocate the arrays
     free(d);
     free(Queue);
+    return res;
+}
+
+int TSP(pnode *head,int *cities, int length){
+    int minDist = -1, i;
+    //Easy Cases
+    if(length == 0 || length == 1)
+        return 0;
+    //Run the TSP algorithm
+    for (i = 0; i < length; i++)
+    {
+        int *copy = copyArray(cities,i,length);
+        minDist = min(minDist,TSPalgorithm(head,copy,i,length-1));
+    }
+    //Dallocate the memory of the array
+    free(cities);
+    return minDist;
+}
+
+int TSPalgorithm(pnode *head,int *cities,int start,int length){ //TODO - not finished
+    if(length == 0)
+        return 0;
+    if(length == 1)
+        return dijkstra(head,length,start,cities[0]);
+    return -1;
+}
+
+int min(int x,int y){
+    if(x==-1)
+        return y;
+    if(y==-1)
+        return x;
+    if(x<=y)
+        return x;
+    return y;
+}
+
+int* copyArray(int *arr, int remove, int length){
+    int *copy = (int*)malloc(sizeof(int)*(length-1));
+    int i,count=0;
+    for (i = 0; i < length; i++)
+    {
+        if(i!=remove){
+            copy[count] = arr[i];
+            count++;
+        }
+    }
+    return copy;
+    
 }
 
 
