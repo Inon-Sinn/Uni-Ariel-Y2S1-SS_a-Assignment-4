@@ -34,12 +34,8 @@ void removeEdge(pnode node);
 
 void removeGraph(pnode *head);
 
+void removeEdge2(pnode node,int node_id);
+
 //-----------
-
-void shortsPath_cmd(pnode head);
-
-void TSP_cmd(pnode head);
-
-
 
 #endif

@@ -109,3 +109,25 @@ void removeEdge(pnode node){
         free(newEdge);
     }
 }
+
+//Removes an edge by the id of its destination
+void removeEdge2(pnode node,int node_id){
+    edge *newEdge = (node->edges);
+    edge **prev = &(node->edges);
+    int found = 0;
+    while(newEdge != NULL && found == 0)
+    {
+        if(newEdge -> endpoint -> node_num == node_id){
+            *prev = newEdge->next;
+            found = 1;
+        }
+        else{
+            prev = &(newEdge->next);
+            newEdge = newEdge -> next;
+        };
+    }
+    //Deallocate the memory of the edge
+    if(found==1){
+        free(newEdge);
+    }
+}
