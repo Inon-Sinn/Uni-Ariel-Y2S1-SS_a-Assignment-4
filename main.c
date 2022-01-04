@@ -14,6 +14,10 @@ int min(int x,int y, int w);
 
 int* copyArray(int *arr, int remove, int length);
 
+int placeCalc(pnode *head, int node_id,int amount_of_Nodes);
+
+int get_Id_by_Pos(pnode *head, int pos, int amount_of_Nodes);
+
 void removeEdge2(pnode node,int node_id){
     edge *newEdge = (node->edges);
     edge **prev = &(node->edges);
@@ -188,14 +192,14 @@ int dijkstra(pnode *head,int amount_of_Nodes,  int src, int dest){
         d[i] = -1;
         Queue[i] = i;
     }
-    d[src] = 0;
+    d[placeCalc(head,src,amount_of_Nodes)] = 0;//TODO
     //Run the algorithm
     while (start<end)
     {
         //Extract the Min in the Queue
 
         Min = start;
-        for (i = start+1; i < end; i++){
+        for (i = start+1; i <= end; i++){
             if(d[Queue[i]] == min(d[Queue[Min]],d[Queue[i]],0))
                 Min = i;
         }
@@ -205,17 +209,17 @@ int dijkstra(pnode *head,int amount_of_Nodes,  int src, int dest){
         Queue[start] = min_id;
         start++;
         //Go over the edges of the min node
-        pnode minNode = getNode(head,min_id);
+        pnode minNode = getNode(head,get_Id_by_Pos(head,min_id,amount_of_Nodes));//TODO - not a real id need to be changed
         edge *curEdge = minNode -> edges;
         while (curEdge != NULL)
         {
             //Relax algorithm
             edge_dest_id = curEdge->endpoint->node_num;
-            d[edge_dest_id] = min(d[edge_dest_id],d[min_id],curEdge->weight);
+            d[placeCalc(head,edge_dest_id,amount_of_Nodes)] = min(d[placeCalc(head,edge_dest_id,amount_of_Nodes)],d[min_id],curEdge->weight);
             curEdge = curEdge-> next;
         }
     }
-    int res = d[dest];
+    int res = d[placeCalc(head,dest,amount_of_Nodes)];
     //Deallocate the arrays
     free(d);
     free(Queue);
@@ -259,6 +263,9 @@ int TSPalgorithm(pnode *head,int *cities,int start,int length,int amount_of_Node
                 tsp = TSPalgorithm(head,copy,cities[i],length-1,amount_of_Nodes);
                 minDist = min(minDist, tsp,path);
             }
+            else{
+                free(copy);
+            }
 
         }
         res = minDist;
@@ -267,6 +274,38 @@ int TSPalgorithm(pnode *head,int *cities,int start,int length,int amount_of_Node
     free(cities);
     return res;
 }
+//An auxiliary function used by dijkstra, will return -1 in case the node doesn't exist
+int placeCalc(pnode *head, int node_id,int amount_of_Nodes){
+    int place = amount_of_Nodes-1;
+    int found = 0;
+    node *current = *head;
+    while (current!= NULL && found == 0){
+        if(current -> node_num == node_id)
+            found = 1;
+        else{
+            place--;
+            current = current -> next;
+        }
+    }
+    return place;
+}
+
+//The opisite of placeCalc - calculate the node id by its positon in the graph
+int get_Id_by_Pos(pnode *head, int pos, int amount_of_Nodes){
+    int place = amount_of_Nodes-1;
+    int found = 0;
+    node *current = *head;
+    while (current!= NULL && found == 0){
+        if(place == pos)
+            found = 1;
+        else{
+            place--;
+            current = current -> next;
+        }
+    }
+    return current-> node_num;
+}
+
 
 //An auxiliary function to get the shortest path
 int min(int x,int y,int w){

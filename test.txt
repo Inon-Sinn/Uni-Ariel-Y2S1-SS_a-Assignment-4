@@ -1,0 +1,9 @@
+TSP shortest path: 6 
+Not foundTSP shortest path: 7 
+Not foundTSP shortest path: 9 
+Id: 6, egdes{d:1 w:4, d:2 w:3, }
+Id: 5, egdes{d:2 w:1, d:0 w:4, }
+Id: 3, egdes{}
+Id: 2, egdes{d:1 w:1, d:0 w:4, }
+Id: 1, egdes{d:0 w:2, d:3 w:7, }
+Id: 0, egdes{d:3 w:3, d:2 w:5, }
