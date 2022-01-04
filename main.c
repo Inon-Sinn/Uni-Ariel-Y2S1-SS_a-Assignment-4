@@ -3,9 +3,6 @@
 #include "graph.h"
 #include "algo.h"
 
-
-
-
 int main(int argc, char const *argv[])
 {
     pnode head = NULL;
@@ -128,7 +125,6 @@ int main(int argc, char const *argv[])
             }
         }
     }
-    printGraph_cmd(head);
     removeGraph(&head);
 
     return 0;

@@ -3,6 +3,7 @@
 #include "graph.h"
 #include "algo.h"
 
+//Finds the shortest path using the dijkstra Algorithm
 int dijkstra(pnode *head,int amount_of_Nodes,  int src, int dest){
     //Test if the nodes even exist
     pnode sourceNode = getNode(head,src);

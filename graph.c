@@ -40,6 +40,7 @@ void add_node(pnode *head, int node_id){
     // change the pointer of head to the new node
     *head = newNode;
 }
+
 //Returns a pointer to the node in the graph with the given Id 
 pnode getNode(pnode *head, int node_id){
     node *current = *head;
@@ -49,7 +50,6 @@ pnode getNode(pnode *head, int node_id){
             return current;
         current = current -> next;
     }
-    printf("Not found");//TODO only here for testing
     return NULL;
 }
 
